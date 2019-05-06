@@ -21,8 +21,8 @@ public class Spaceflight : MonoBehaviour {
 	void Start () {
 		rb = gameObject.GetComponent<Rigidbody> ();
 	}
-		
-	void FixedUpdate () {
+
+    void FixedUpdate () {
 
 		if (stunned > 1f)
 			stunned = 1f; 
@@ -37,6 +37,46 @@ public class Spaceflight : MonoBehaviour {
 		ControlHorizontal = Input.GetAxis ("Horizontal")*-1;
 		ControlVertical = Input.GetAxis ("Vertical");
 
+        GameObject player = GameObject.Find("Camera");
+        Quaternion currRotatation = player.transform.localRotation;
+        if (ControlHorizontal>0)
+        {
+            currRotatation.z += 0.0005f;
+            if(currRotatation.z > 0.05f)
+            {
+                currRotatation.z = 0.05f;
+            }
+        }
+        else if(ControlHorizontal<0)
+        {
+            currRotatation.z -= 0.0005f;
+            if (currRotatation.z < -0.05f)
+            {
+                currRotatation.z = -0.05f;
+            }
+        }
+        else
+        {
+            if (currRotatation.z > 0)
+            {
+                currRotatation.z -= 0.0009f;
+                if (currRotatation.z < 0f)
+                {
+                    currRotatation.z = 0f;
+                }
+            }
+            else if (currRotatation.z < 0)
+            {
+                currRotatation.z += 0.0009f;
+                if (currRotatation.z > 0f)
+                {
+                    currRotatation.z = 0f;
+                }
+            }
+        }
+
+        player.transform.localRotation = currRotatation;
+
         Vector3 vDiff = transform.forward * MaxSpeed * ControlThrust - rb.velocity; 
 		if (vDiff.magnitude > MaxAcceleration * (1f - stunned))
 			vDiff *= MaxAcceleration * (1f - stunned) / vDiff.magnitude;
@@ -47,7 +87,7 @@ public class Spaceflight : MonoBehaviour {
 		avdiff.Normalize (); 
 		rb.AddTorque (avdiff * Mathf.Clamp (mag, 0, MaxAngularAcceleration * Time.fixedDeltaTime  * (1f - stunned)), ForceMode.VelocityChange);
 
-		hull.localRotation = Quaternion.Euler (0f, ControlHorizontal * -1f * maxTilt, 0f);
+		hull.localRotation = Quaternion.Euler (0f, ControlHorizontal * -1f, 0f);
 	}
 
 	void OnCollisionEnter()
