@@ -75,6 +75,8 @@ public class Spaceflight : MonoBehaviour {
             }
         }
 
+
+
         player.transform.localRotation = currRotatation;
 
         Vector3 vDiff = transform.forward * MaxSpeed * ControlThrust - rb.velocity; 
