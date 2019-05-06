@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Spaceflight : MonoBehaviour {
 
-
+    public bool isplayer; //Boolean for control on the manager
+    public bool follower; //Boolean for the movement of the bots
 	public Transform hull; 
 	public float maxTilt = 20f; 
-	public float MaxSpeed = 40f; 
+	public float MaxSpeed = 60f; 
 	public float MaxAngularAcceleration = 30f; 
 	public float MaxAcceleration = 4f; 
 	public float TurnFactor = 0f; 
@@ -31,68 +32,79 @@ public class Spaceflight : MonoBehaviour {
 		else if (stunned > 0f)
 			stunned -= Time.fixedDeltaTime * 0.5f; 
 		else
-			stunned = 0f; 
+			stunned = 0f;
 
-        
-		ControlHorizontal = Input.GetAxis ("Horizontal")*-1;
-		ControlVertical = Input.GetAxis ("Vertical");
+        if (isplayer)
+        {
+            ControlHorizontal = Input.GetAxis("Horizontal") * -1;
+            ControlVertical = Input.GetAxis("Vertical");
 
-        GameObject player = GameObject.Find("Camera");
-        Quaternion currRotatation = player.transform.localRotation;
-        if (ControlHorizontal>0)
-        {
-            currRotatation.z += 0.0005f;
-            if(currRotatation.z > 0.05f)
+            GameObject player = GameObject.Find("Camera");
+            Quaternion currRotatation = player.transform.localRotation;
+            if (ControlHorizontal > 0)
             {
-                currRotatation.z = 0.05f;
-            }
-        }
-        else if(ControlHorizontal<0)
-        {
-            currRotatation.z -= 0.0005f;
-            if (currRotatation.z < -0.05f)
-            {
-                currRotatation.z = -0.05f;
-            }
-        }
-        else
-        {
-            if (currRotatation.z > 0)
-            {
-                currRotatation.z -= 0.0009f;
-                if (currRotatation.z < 0f)
+                currRotatation.z += 0.0005f;
+                if (currRotatation.z > 0.05f)
                 {
-                    currRotatation.z = 0f;
+                    currRotatation.z = 0.05f;
                 }
             }
-            else if (currRotatation.z < 0)
+            else if (ControlHorizontal < 0)
             {
-                currRotatation.z += 0.0009f;
-                if (currRotatation.z > 0f)
+                currRotatation.z -= 0.0005f;
+                if (currRotatation.z < -0.05f)
                 {
-                    currRotatation.z = 0f;
+                    currRotatation.z = -0.05f;
                 }
             }
+            else
+            {
+                if (currRotatation.z > 0)
+                {
+                    currRotatation.z -= 0.0009f;
+                    if (currRotatation.z < 0f)
+                    {
+                        currRotatation.z = 0f;
+                    }
+                }
+                else if (currRotatation.z < 0)
+                {
+                    currRotatation.z += 0.0009f;
+                    if (currRotatation.z > 0f)
+                    {
+                        currRotatation.z = 0f;
+                    }
+                }
+            }
+            player.transform.localRotation = currRotatation;
+
+            Vector3 vDiff = transform.forward * MaxSpeed * ControlThrust - rb.velocity;
+            if (vDiff.magnitude > MaxAcceleration * (1f - stunned))
+                vDiff *= MaxAcceleration * (1f - stunned) / vDiff.magnitude;
+            rb.AddForce(vDiff, ForceMode.VelocityChange);
+
+            Vector3 avdiff = -1 * (TurnFactor * (transform.up * ControlHorizontal + transform.right * ControlVertical) + rb.angularVelocity);
+            float mag = avdiff.magnitude;
+            avdiff.Normalize();
+            rb.AddTorque(avdiff * Mathf.Clamp(mag, 0, MaxAngularAcceleration * Time.fixedDeltaTime * (1f - stunned)), ForceMode.VelocityChange);
+
+            hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
+            if (Input.GetButtonDown("Jump"))
+            {
+                MaxSpeed = 150f;
+                Vector3 newPos = player.transform.localPosition;
+                newPos.y += 50;
+            }
+            else if (Input.GetButtonUp("Jump"))
+            {
+                MaxSpeed = 60f;
+                Vector3 newPos = player.transform.localPosition;
+                newPos.y -= 50;
+            }
         }
+    }
 
-
-
-        player.transform.localRotation = currRotatation;
-
-        Vector3 vDiff = transform.forward * MaxSpeed * ControlThrust - rb.velocity; 
-		if (vDiff.magnitude > MaxAcceleration * (1f - stunned))
-			vDiff *= MaxAcceleration * (1f - stunned) / vDiff.magnitude;
-		rb.AddForce (vDiff , ForceMode.VelocityChange);
-
-		Vector3 avdiff = -1 * (TurnFactor * (transform.up * ControlHorizontal + transform.right * ControlVertical) + rb.angularVelocity); 
-        float mag = avdiff.magnitude;
-		avdiff.Normalize (); 
-		rb.AddTorque (avdiff * Mathf.Clamp (mag, 0, MaxAngularAcceleration * Time.fixedDeltaTime  * (1f - stunned)), ForceMode.VelocityChange);
-
-		hull.localRotation = Quaternion.Euler (0f, ControlHorizontal * -1f, 0f);
-	}
-
-	void OnCollisionEnter()
+    void OnCollisionEnter()
 	{
 		stunned = 1f;
 	}
