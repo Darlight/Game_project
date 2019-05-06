@@ -172,7 +172,7 @@ public class Spaceflight : MonoBehaviour {
             rb.AddTorque(avdiff * Mathf.Clamp(mag, 0, MaxAngularAcceleration * Time.fixedDeltaTime * (1f - stunned)), ForceMode.VelocityChange);
 
             hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
-            MaxSpeed = 150;
+            MaxSpeed = 15;
         }
     }
 
@@ -195,7 +195,7 @@ public class Spaceflight : MonoBehaviour {
 
     void changeindex()
     {
-        toSetIndex = toSetIndex + 0.0001f;
+        toSetIndex = toSetIndex + 0.001f;
         if (toSetIndex >= enemies.Length)
         {
             toSetIndex = 0.0f;
