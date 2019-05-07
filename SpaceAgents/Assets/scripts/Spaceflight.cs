@@ -7,8 +7,9 @@ using UnityEngine.AI;
 public class Spaceflight : MonoBehaviour {
 
     public int life = 100;
-    public int power = 100;
+    public int power = 10;
     public bool isplayer; //Boolean for control on the manager
+    public bool isEnemy; //Boolean to make diference between good and evil bots
     public Transform hull;
     public float maxTilt = 20f;
     public float MaxSpeed = 100f;
@@ -23,6 +24,7 @@ public class Spaceflight : MonoBehaviour {
     public Transform[] enemies;
     public int index = 0;
     private float toSetIndex = 0.0f;
+    public GameObject explosion;
 
     void Start() {
         rb = gameObject.GetComponent<Rigidbody>();
@@ -43,10 +45,10 @@ public class Spaceflight : MonoBehaviour {
         //if player is true
         if (isplayer)
         {
-            ControlHorizontal = Input.GetAxis("Horizontal") * -1;
+            ControlHorizontal = Input.GetAxis("Horizontal") * -1;//get controls
             ControlVertical = Input.GetAxis("Vertical");
 
-            GameObject player = GameObject.Find("Camera");
+            GameObject player = GameObject.Find("Camera");//This will be helpful to move a little the camara when the user moves to the left or right
             Quaternion currRotatation = player.transform.localRotation;
             if (ControlHorizontal > 0)
             {
@@ -85,7 +87,7 @@ public class Spaceflight : MonoBehaviour {
             }
             player.transform.localRotation = currRotatation;
 
-            Vector3 vDiff = transform.forward * MaxSpeed * ControlThrust - rb.velocity;
+            Vector3 vDiff = transform.forward * MaxSpeed * ControlThrust - rb.velocity;//Add a force for the ship to move
             if (vDiff.magnitude > MaxAcceleration * (1f - stunned))
                 vDiff *= MaxAcceleration * (1f - stunned) / vDiff.magnitude;
             rb.AddForce(vDiff, ForceMode.VelocityChange);
@@ -93,10 +95,10 @@ public class Spaceflight : MonoBehaviour {
             Vector3 avdiff = -1 * (TurnFactor * (transform.up * ControlHorizontal + transform.right * ControlVertical) + rb.angularVelocity);
             float mag = avdiff.magnitude;
             avdiff.Normalize();
-            rb.AddTorque(avdiff * Mathf.Clamp(mag, 0, MaxAngularAcceleration * Time.fixedDeltaTime * (1f - stunned)), ForceMode.VelocityChange);
+            rb.AddTorque(avdiff * Mathf.Clamp(mag, 0, MaxAngularAcceleration * Time.fixedDeltaTime * (1f - stunned)), ForceMode.VelocityChange);//Add a torque in the direction that the user is setting with the inputs
 
             hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
-            if (Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump"))//If the user press space then the speed will be highter
             {
                 MaxSpeed = 200f;
             }
@@ -105,14 +107,52 @@ public class Spaceflight : MonoBehaviour {
                 MaxSpeed = 100f;
             }
         }
-        //if shooter is true
+        //if it is a bot, or it is not a player
         else
         {
-            changeindex();
+            changeindex();//Change index for the bot to go to other place
             if (enemies[index])
             {
+                RaycastHit hit;
                 transform.LookAt(enemies[index].position);
                 rb.AddRelativeForce(0, 0, 0.1f,ForceMode.VelocityChange);
+                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+                {
+                    if (hit.collider.tag == "agentship" && isEnemy)//Just if it is an enemy
+                    {
+                        int Objectlife = hit.transform.parent.parent.GetComponent<Spaceflight>().life;
+                        int Objectpower = hit.transform.parent.parent.GetComponent<Spaceflight>().power;
+                        hit.transform.parent.parent.GetComponent<Spaceflight>().life = Objectlife - power;
+                        if (Objectlife <= 0)//if the object does not have more life
+                        {
+                            Objectlife = 0;
+                            power += 10;//Increment power when user kill someone
+                            Instantiate(explosion, hit.transform.parent.parent.position, hit.transform.parent.parent.rotation);
+                            Destroy(hit.transform.parent.parent.gameObject);
+                        }
+                    }
+                    else if(hit.collider.tag == "destructor")
+                    {
+                        int Objectlife = hit.transform.parent.GetComponent<Spaceflight>().life;
+                        int Objectpower = hit.transform.parent.GetComponent<Spaceflight>().power;
+                        hit.transform.parent.GetComponent<Spaceflight>().life = Objectlife - power;
+                        if (Objectlife <= 0)//if the object does not have more life
+                        {
+                            Objectlife = 0;
+                            power += 10;//Increment power when user kill someone
+                            Instantiate(explosion, hit.transform.parent.position, hit.transform.parent.rotation);
+                            Destroy(hit.transform.parent.gameObject);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                index++;
+                if (index >= enemies.Length)
+                {
+                    index = 0;
+                }
             }
         }
     }
