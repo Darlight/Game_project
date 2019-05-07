@@ -9,7 +9,7 @@ public class manager : MonoBehaviour {
     public static int life = 1000;
     public static int power = 0;
     public GameObject explosion;
-    public int enemies = 5;
+    public int enemies = 20;
 
     // Use this for initialization
     void Start () {
@@ -57,7 +57,7 @@ public class manager : MonoBehaviour {
         }
         else if (enemies == 0)
         {
-            transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "VICTORY";
+            transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "VICTORY\n ENEMIES HAVE DECLARED WITHDRAWAL";
         }
         
     }
