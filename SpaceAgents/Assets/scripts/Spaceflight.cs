@@ -112,7 +112,7 @@ public class Spaceflight : MonoBehaviour {
             if (enemies[index])
             {
                 transform.LookAt(enemies[index].position);
-                rb.AddRelativeForce(0, 0, 0.1f,ForceMode.Acceleration);
+                rb.AddRelativeForce(0, 0, 0.1f,ForceMode.VelocityChange);
             }
         }
     }
