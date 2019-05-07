@@ -49,44 +49,46 @@ public class Spaceflight : MonoBehaviour {
             ControlVertical = Input.GetAxis("Vertical");
 
             GameObject player = GameObject.Find("Camera");//This will be helpful to move a little the camara when the user moves to the left or right
-            Quaternion currRotatation = player.transform.localRotation;
-            if (ControlHorizontal > 0)
+            if (player)
             {
-                currRotatation.z += 0.0005f;
-                if (currRotatation.z > 0.05f)
+                Quaternion currRotatation = player.transform.localRotation;
+                if (ControlHorizontal > 0)
                 {
-                    currRotatation.z = 0.05f;
-                }
-            }
-            else if (ControlHorizontal < 0)
-            {
-                currRotatation.z -= 0.0005f;
-                if (currRotatation.z < -0.05f)
-                {
-                    currRotatation.z = -0.05f;
-                }
-            }
-            else
-            {
-                if (currRotatation.z > 0)
-                {
-                    currRotatation.z -= 0.0009f;
-                    if (currRotatation.z < 0f)
+                    currRotatation.z += 0.0005f;
+                    if (currRotatation.z > 0.05f)
                     {
-                        currRotatation.z = 0f;
+                        currRotatation.z = 0.05f;
                     }
                 }
-                else if (currRotatation.z < 0)
+                else if (ControlHorizontal < 0)
                 {
-                    currRotatation.z += 0.0009f;
-                    if (currRotatation.z > 0f)
+                    currRotatation.z -= 0.0005f;
+                    if (currRotatation.z < -0.05f)
                     {
-                        currRotatation.z = 0f;
+                        currRotatation.z = -0.05f;
                     }
                 }
+                else
+                {
+                    if (currRotatation.z > 0)
+                    {
+                        currRotatation.z -= 0.0009f;
+                        if (currRotatation.z < 0f)
+                        {
+                            currRotatation.z = 0f;
+                        }
+                    }
+                    else if (currRotatation.z < 0)
+                    {
+                        currRotatation.z += 0.0009f;
+                        if (currRotatation.z > 0f)
+                        {
+                            currRotatation.z = 0f;
+                        }
+                    }
+                }
+                player.transform.localRotation = currRotatation;
             }
-            player.transform.localRotation = currRotatation;
-
             Vector3 vDiff = transform.forward * MaxSpeed * ControlThrust - rb.velocity;//Add a force for the ship to move
             if (vDiff.magnitude > MaxAcceleration * (1f - stunned))
                 vDiff *= MaxAcceleration * (1f - stunned) / vDiff.magnitude;
@@ -97,7 +99,10 @@ public class Spaceflight : MonoBehaviour {
             avdiff.Normalize();
             rb.AddTorque(avdiff * Mathf.Clamp(mag, 0, MaxAngularAcceleration * Time.fixedDeltaTime * (1f - stunned)), ForceMode.VelocityChange);//Add a torque in the direction that the user is setting with the inputs
 
-            hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
+            if (hull)
+            {
+                hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
+            }
             if (Input.GetButtonDown("Jump"))//If the user press space then the speed will be highter
             {
                 MaxSpeed = 200f;
@@ -120,30 +125,22 @@ public class Spaceflight : MonoBehaviour {
                 {
                     if (hit.collider.tag == "agentship" && isEnemy)//Just if it is an enemy
                     {
-                        int Objectlife = hit.transform.parent.parent.GetComponent<Spaceflight>().life;
-                        int Objectpower = hit.transform.parent.parent.GetComponent<Spaceflight>().power;
-                        hit.transform.parent.parent.GetComponent<Spaceflight>().life = Objectlife - power;
+                        int Objectlife = manager.life;
+                        int Objectpower = manager.power;
+                        manager.DownLife(Objectpower);
                         if (Objectlife <= 0)//if the object does not have more life
                         {
                             Objectlife = 0;
                             power += 10;//Increment power when user kill someone
-                            Instantiate(explosion, hit.transform.parent.parent.position, hit.transform.parent.parent.rotation);
-                            Destroy(hit.transform.parent.parent.gameObject);
+                            if (hit.transform)
+                            {
+                                transform.Find("SecondCamera").gameObject.SetActive(true);
+                                Instantiate(explosion, hit.transform.parent.parent.position, hit.transform.parent.parent.rotation);
+                                Destroy(hit.transform.parent.gameObject);
+                            }
                         }
                     }
-                    else if(hit.collider.tag == "destructor")
-                    {
-                        int Objectlife = hit.transform.parent.GetComponent<Spaceflight>().life;
-                        int Objectpower = hit.transform.parent.GetComponent<Spaceflight>().power;
-                        hit.transform.parent.GetComponent<Spaceflight>().life = Objectlife - power;
-                        if (Objectlife <= 0)//if the object does not have more life
-                        {
-                            Objectlife = 0;
-                            power += 10;//Increment power when user kill someone
-                            Instantiate(explosion, hit.transform.parent.position, hit.transform.parent.rotation);
-                            Destroy(hit.transform.parent.gameObject);
-                        }
-                    }
+                    
                 }
             }
             else

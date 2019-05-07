@@ -6,7 +6,10 @@ public class manager : MonoBehaviour {
 
     public static int Objectlife = 100;//Life of the enemy that the raycast is pointing to
     public static int Objectpower = 100;//power of the enemy that the raycas is pointing to
+    public static int life = 1000;
+    public static int power = 0;
     public GameObject explosion;
+    public int enemies = 5;
 
     // Use this for initialization
     void Start () {
@@ -18,6 +21,8 @@ public class manager : MonoBehaviour {
         Ray myRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.5f));
         RaycastHit hitInfo;
         GameObject player = GameObject.Find("PlayerShip");
+        power = player.GetComponent<Spaceflight>().power;
+        life =  player.GetComponent<Spaceflight>().life;
         transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + player.GetComponent<Spaceflight>().life;//get user life
         transform.Find("ownPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player.GetComponent<Spaceflight>().power;//get user power
 
@@ -36,6 +41,7 @@ public class manager : MonoBehaviour {
                         player.GetComponent<Spaceflight>().power += 10;//Increment power when user kill someone
                         Instantiate(explosion, hitInfo.transform.parent.position, hitInfo.transform.parent.rotation);
                         Destroy(hitInfo.transform.parent.gameObject);
+                        enemies--;
                     }
                     transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "|" + Objectlife + "|";//show on screen the life of the enemy that the user is poing to
                 }
@@ -48,6 +54,21 @@ public class manager : MonoBehaviour {
         if (player.GetComponent<Spaceflight>().life <= 0)
         {
             transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "GAME OVER";
+        }
+        else if (enemies == 0)
+        {
+            transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "VICTORY";
+        }
+        
+    }
+
+    public static void DownLife(int power)
+    {
+        GameObject player = GameObject.Find("PlayerShip");
+        player.GetComponent<Spaceflight>().life -= power;
+        if (player.GetComponent<Spaceflight>().life <= 0)
+        {
+            player.GetComponent<Spaceflight>().life = 0;
         }
     }
 }
