@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Microsoft.CSharp;
+using UnityEngine.AI;
+
 
 public class Spaceflight : MonoBehaviour {
 
+    public int life = 100;
+    public int power = 100;
     public bool isplayer; //Boolean for control on the manager
-    public bool shooter; //Boolean for the movement of the bots, if truee ship will just shoot to the chargers or spacefrigates
     public Transform hull;
     public float maxTilt = 20f;
-    public float MaxSpeed = 60f;
+    public float MaxSpeed = 100f;
     public float MaxAngularAcceleration = 30f;
     public float MaxAcceleration = 4f;
     public float TurnFactor = 0f;
@@ -18,12 +20,9 @@ public class Spaceflight : MonoBehaviour {
     internal float ControlThrust = 1f;
     internal float stunned = 0f;
     private Rigidbody rb;
-    public Rigidbody[] enemies;
+    public Transform[] enemies;
     public int index = 0;
     private float toSetIndex = 0.0f;
-    private float currentRandom = 0;
-    private int lastIndex = 0;
-
 
     void Start() {
         rb = gameObject.GetComponent<Rigidbody>();
@@ -99,98 +98,23 @@ public class Spaceflight : MonoBehaviour {
             hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
             if (Input.GetButtonDown("Jump"))
             {
-                MaxSpeed = 150f;
-                Vector3 newPos = player.transform.localPosition;
-                newPos.y += 50;
+                MaxSpeed = 200f;
             }
             else if (Input.GetButtonUp("Jump"))
             {
-                MaxSpeed = 60f;
-                Vector3 newPos = player.transform.localPosition;
-                newPos.y -= 50;
+                MaxSpeed = 100f;
             }
         }
-
         //if shooter is true
-        else if (shooter)
+        else
         {
             changeindex();
-            Vector3 position = enemies[index].transform.position;
-        }
-        else
-        {
-            ControlHorizontal = generateRandom();
-            ControlVertical = generateRandom();
-
-            GameObject player = GameObject.Find("Camera");
-            Quaternion currRotatation = player.transform.localRotation;
-            if (ControlHorizontal > 0)
+            if (enemies[index])
             {
-                currRotatation.z += 0.0005f;
-                if (currRotatation.z > 0.05f)
-                {
-                    currRotatation.z = 0.05f;
-                }
+                transform.LookAt(enemies[index].position);
+                rb.AddRelativeForce(0, 0, 0.1f,ForceMode.Acceleration);
             }
-            else if (ControlHorizontal < 0)
-            {
-                currRotatation.z -= 0.0005f;
-                if (currRotatation.z < -0.05f)
-                {
-                    currRotatation.z = -0.05f;
-                }
-            }
-            else
-            {
-                if (currRotatation.z > 0)
-                {
-                    currRotatation.z -= 0.0009f;
-                    if (currRotatation.z < 0f)
-                    {
-                        currRotatation.z = 0f;
-                    }
-                }
-                else if (currRotatation.z < 0)
-                {
-                    currRotatation.z += 0.0009f;
-                    if (currRotatation.z > 0f)
-                    {
-                        currRotatation.z = 0f;
-                    }
-                }
-            }
-            player.transform.localRotation = currRotatation;
-
-            Vector3 vDiff = transform.forward * MaxSpeed * ControlThrust - rb.velocity;
-            if (vDiff.magnitude > MaxAcceleration * (1f - stunned))
-                vDiff *= MaxAcceleration * (1f - stunned) / vDiff.magnitude;
-            rb.AddForce(vDiff, ForceMode.VelocityChange);
-
-            Vector3 avdiff = -1 * (TurnFactor * (transform.up * ControlHorizontal + transform.right * ControlVertical) + rb.angularVelocity);
-            float mag = avdiff.magnitude;
-            avdiff.Normalize();
-            rb.AddTorque(avdiff * Mathf.Clamp(mag, 0, MaxAngularAcceleration * Time.fixedDeltaTime * (1f - stunned)), ForceMode.VelocityChange);
-
-            hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
-            MaxSpeed = 15;
         }
-    }
-
-    float generateRandom()
-    {
-        changeindex();
-        if (index == 0)
-        {
-            return 0;
-        }
-        else
-        {
-            if (lastIndex != index)
-            {
-                currentRandom = Random.Range(-1f, 1f);
-            }                   
-        }
-        return currentRandom;
     }
 
     void changeindex()
@@ -200,12 +124,7 @@ public class Spaceflight : MonoBehaviour {
         {
             toSetIndex = 0.0f;
         }
-        int newIndex = (int)toSetIndex;
-        if(newIndex != index)
-        {
-            lastIndex = index;
-        }
-        index = newIndex;
+        index = (int)toSetIndex;
     }
 
     void OnCollisionEnter()
