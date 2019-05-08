@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class manager : MonoBehaviour {
+public class manager : MonoBehaviour
+{
 
     public static int Objectlife = 100;//Life of the enemy that the raycast is pointing to
     public static int Objectpower = 100;//power of the enemy that the raycas is pointing to
@@ -16,13 +17,15 @@ public class manager : MonoBehaviour {
     public GameObject[] pointers;
 
     // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-       
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
         if (Camera.main)
         {
             Ray myRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.5f));
@@ -30,7 +33,7 @@ public class manager : MonoBehaviour {
             GameObject player = GameObject.Find("PlayerShip");
             power = player.GetComponent<Spaceflight>().power;
             life = player.GetComponent<Spaceflight>().life;
-            transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player.GetComponent<Spaceflight>().life/1000);//get user life
+            transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player.GetComponent<Spaceflight>().life / 1000);//get user life
             transform.Find("ownPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player.GetComponent<Spaceflight>().power;//get user power
 
             if (Input.GetMouseButtonDown(0))//OnClick
@@ -67,8 +70,8 @@ public class manager : MonoBehaviour {
                 transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "VICTORY\n ENEMIES HAVE DECLARED WITHDRAWAL";
             }
         }
-        
-        
+
+
     }
 
     public static void DownLife(int power)
@@ -81,7 +84,7 @@ public class manager : MonoBehaviour {
         }
     }
 
-    
+
 
 
     private void OnGUI()
@@ -96,7 +99,8 @@ public class manager : MonoBehaviour {
                 Vector3 rect = Camera.main.WorldToScreenPoint(pointers[i].transform.position);
                 GUI.DrawTexture(new Rect(rect.x - 15 / 2, Screen.height - rect.y - 15 / 2, 15, 15), TargetTexture, ScaleMode.StretchToFill, true, 10.0f);
             }
-            
+
         }
     }
 }
+
