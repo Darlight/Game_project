@@ -22,12 +22,13 @@ public class Spaceflight : MonoBehaviour {
     internal float stunned = 0f;
     private Rigidbody rb;
     public Transform[] enemies;
-    public int index = 0;
+    private int index;
     private float toSetIndex = 0.0f;
     public GameObject explosion;
 
     void Start() {
         rb = gameObject.GetComponent<Rigidbody>();
+        index = (int)Random.Range(0f, 9f);
     }
 
     void FixedUpdate() {
@@ -135,7 +136,7 @@ public class Spaceflight : MonoBehaviour {
                             if (hit.transform)
                             {
                                 transform.Find("SecondCamera").gameObject.SetActive(true);
-                                Instantiate(explosion, hit.transform.parent.parent.position, hit.transform.parent.parent.rotation);
+                                Instantiate(explosion, hit.transform.parent.position, hit.transform.parent.rotation);
                                 Destroy(hit.transform.parent.gameObject);
                             }
                         }
@@ -156,12 +157,12 @@ public class Spaceflight : MonoBehaviour {
 
     void changeindex()
     {
-        toSetIndex = toSetIndex + 0.001f;
-        if (toSetIndex >= enemies.Length)
+        toSetIndex = toSetIndex + 0.01f;
+        if (toSetIndex >= 1)
         {
             toSetIndex = 0.0f;
+            index = (int) Random.Range(0.0f,9.0f);//We set this way because we want them to follow the 10 leaders or follow the player.
         }
-        index = (int)toSetIndex;
     }
 
     void OnCollisionEnter()
