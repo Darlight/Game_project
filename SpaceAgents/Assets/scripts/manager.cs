@@ -8,6 +8,8 @@ public class manager : MonoBehaviour {
     public static int Objectpower = 100;//power of the enemy that the raycas is pointing to
     public static int life = 1000;
     public static int power = 0;
+    public static int life2 = 1000;
+    public static int power2 = 0;
     public GameObject explosion;
     public int enemies = 50;
     public Texture TargetTexture;
@@ -25,27 +27,31 @@ public class manager : MonoBehaviour {
        
         if (Camera.main)
         {
-            Ray myRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.5f));
             RaycastHit hitInfo;
             GameObject player = GameObject.Find("PlayerShip");
-            power = player.GetComponent<Spaceflight>().power;
-            life = player.GetComponent<Spaceflight>().life;
-            transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player.GetComponent<Spaceflight>().life/1000);//get user life
-            transform.Find("ownPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player.GetComponent<Spaceflight>().power;//get user power
+            power = player.GetComponent<vesusScript>().power;
+            life = player.GetComponent<vesusScript>().life;
+            transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player.GetComponent<vesusScript>().life/1000);//get user life
+            transform.Find("ownPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player.GetComponent<vesusScript>().power;//get user power
+            GameObject player2 = GameObject.Find("PlayerShip2");
+            power2 = player2.GetComponent<player2>().power;
+            life2 = player2.GetComponent<player2>().life;
+            transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player2.GetComponent<player2>().life / 1000);//get user life
+            transform.Find("ownPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player2.GetComponent<player2>().power;//get user power
 
             if (Input.GetMouseButtonDown(0))//OnClick
             {
-                if (Physics.Raycast(myRay, out hitInfo))
+                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, Mathf.Infinity))
                 {
-                    if (hitInfo.collider.tag == "destructor")//Just if it is an enemy
+                    if (hitInfo.collider.tag == "agentship")//Just if it is an enemy
                     {
-                        Objectlife = hitInfo.transform.parent.GetComponent<Spaceflight>().life;
-                        Objectpower = hitInfo.transform.parent.GetComponent<Spaceflight>().power;
-                        hitInfo.transform.parent.GetComponent<Spaceflight>().life = Objectlife - player.GetComponent<Spaceflight>().power;
+                        Objectlife = hitInfo.transform.parent.GetComponent<vesusScript>().life;
+                        Objectpower = hitInfo.transform.parent.GetComponent<vesusScript>().power;
+                        hitInfo.transform.parent.GetComponent<vesusScript>().life = Objectlife - player.GetComponent<vesusScript>().power;
                         if (Objectlife <= 0)//if the object does not have more life
                         {
                             Objectlife = 0;
-                            player.GetComponent<Spaceflight>().power += 10;//Increment power when user kill someone
+                            player.GetComponent<vesusScript>().power += 10;//Increment power when user kill someone
                             Instantiate(explosion, hitInfo.transform.parent.position, hitInfo.transform.parent.rotation);
                             Destroy(hitInfo.transform.parent.gameObject);
                             enemies--;
@@ -58,13 +64,38 @@ public class manager : MonoBehaviour {
                     }
                 }
             }
-            if (player.GetComponent<Spaceflight>().life <= 0)
+            if (Input.GetButtonDown("Jump"))//OnClick
             {
-                transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "GAME OVER";
+                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, Mathf.Infinity))
+                {
+                    if (hitInfo.collider.tag == "agentship")//Just if it is an enemy
+                    {
+                        Objectlife = hitInfo.transform.parent.GetComponent<player2>().life;
+                        Objectpower = hitInfo.transform.parent.GetComponent<player2>().power;
+                        hitInfo.transform.parent.GetComponent<player2>().life = Objectlife - player.GetComponent<player2>().power;
+                        if (Objectlife <= 0)//if the object does not have more life
+                        {
+                            Objectlife = 0;
+                            player.GetComponent<player2>().power += 10;//Increment power when user kill someone
+                            Instantiate(explosion, hitInfo.transform.parent.position, hitInfo.transform.parent.rotation);
+                            Destroy(hitInfo.transform.parent.gameObject);
+                            enemies--;
+                        }
+                        transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "|" + Objectlife + "|";//show on screen the life of the enemy that the user is poing to
+                    }
+                    else
+                    {
+                        transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "";
+                    }
+                }
             }
-            else if (enemies == 0)
+            if (player.GetComponent<vesusScript>().life <= 0)
             {
-                transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "VICTORY\n ENEMIES HAVE DECLARED WITHDRAWAL";
+                transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "Player 1 wins";
+            }
+            else if(player2.GetComponent<player2>().life <= 0)
+            {
+                transform.Find("life").GetComponent<UnityEngine.UI.Text>().text = "Player 2 wins";
             }
         }
         
