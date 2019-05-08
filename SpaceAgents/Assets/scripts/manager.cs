@@ -30,7 +30,7 @@ public class manager : MonoBehaviour {
             GameObject player = GameObject.Find("PlayerShip");
             power = player.GetComponent<Spaceflight>().power;
             life = player.GetComponent<Spaceflight>().life;
-            transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + player.GetComponent<Spaceflight>().life;//get user life
+            transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player.GetComponent<Spaceflight>().life/1000);//get user life
             transform.Find("ownPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player.GetComponent<Spaceflight>().power;//get user power
 
             if (Input.GetMouseButtonDown(0))//OnClick
