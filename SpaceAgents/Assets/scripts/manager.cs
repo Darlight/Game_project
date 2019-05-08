@@ -41,7 +41,7 @@ public class manager : MonoBehaviour {
 
             if (Input.GetMouseButtonDown(0))//OnClick
             {
-                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, Mathf.Infinity))
+                if (Physics.Raycast(player.transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, Mathf.Infinity))
                 {
                     if (hitInfo.collider.tag == "agentship")//Just if it is an enemy
                     {
@@ -66,7 +66,7 @@ public class manager : MonoBehaviour {
             }
             if (Input.GetButtonDown("Jump"))//OnClick
             {
-                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, Mathf.Infinity))
+                if (Physics.Raycast(player2.transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, Mathf.Infinity))
                 {
                     if (hitInfo.collider.tag == "agentship")//Just if it is an enemy
                     {
