@@ -559,11 +559,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 355817618}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 357ad7356cc5fab43acdbd2d12cfcb05, type: 3}
+  m_Script: {fileID: 11500000, guid: 22321e1714b30eb418878ee7ad84300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100000, guid: e0dc4d47bced6d54ab1461804114b5d0, type: 2}
-  enemies: 30
+  enemies: 0
   TargetTexture: {fileID: 2800000, guid: 35ccca05927f2884086c4ed34112b9f0, type: 3}
   range: 10
   multiplier: 0
@@ -2235,7 +2235,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1422870792}
   m_LocalRotation: {x: -0, y: 0.6072337, z: -0.79452324, w: 0}
-  m_LocalPosition: {x: 214.93, y: 135.88, z: 179.89}
+  m_LocalPosition: {x: 214.93, y: 167.3, z: 295.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 439063995}
