@@ -81,6 +81,9 @@ public class manager : MonoBehaviour {
         }
     }
 
+    
+
+
     private void OnGUI()
     {
         pointers = GameObject.FindGameObjectsWithTag("destructor");
@@ -93,6 +96,7 @@ public class manager : MonoBehaviour {
                 Vector3 rect = Camera.main.WorldToScreenPoint(pointers[i].transform.position);
                 GUI.DrawTexture(new Rect(rect.x - 15 / 2, Screen.height - rect.y - 15 / 2, 15, 15), TargetTexture, ScaleMode.StretchToFill, true, 10.0f);
             }
+            
         }
     }
 }
