@@ -91,7 +91,7 @@ public class manager : MonoBehaviour {
         for (int i = 0; i < pointers.Length; i++)
         {
             var dist = Vector3.Distance(transform.position, pointers[i].transform.position);
-            if (pointers[i].GetComponent<Renderer>().isVisible)
+            if (pointers[i].GetComponent<Renderer>().isVisible && Camera.main)
             {
                 Vector3 rect = Camera.main.WorldToScreenPoint(pointers[i].transform.position);
                 GUI.DrawTexture(new Rect(rect.x - 15 / 2, Screen.height - rect.y - 15 / 2, 15, 15), TargetTexture, ScaleMode.StretchToFill, true, 10.0f);
