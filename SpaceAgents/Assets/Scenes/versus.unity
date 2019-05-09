@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 10000
-  power: 10
+  power: 1000
   isplayer: 1
   hull: {fileID: 2024563552}
   maxTilt: 20
@@ -2186,8 +2186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa474554377068543a38053a43027a16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 100000
-  power: 10
+  life: 10000
+  power: 1000
   isplayer: 1
   hull: {fileID: 439063995}
   maxTilt: 20
