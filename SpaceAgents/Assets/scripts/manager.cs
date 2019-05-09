@@ -28,7 +28,7 @@ public class manager : MonoBehaviour
 
         if (Camera.main)
         {
-            Ray myRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.5f));
+            Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
             GameObject player = GameObject.Find("PlayerShip");
             power = player.GetComponent<Spaceflight>().power;
