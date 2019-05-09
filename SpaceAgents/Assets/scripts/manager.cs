@@ -28,7 +28,7 @@ public class manager : MonoBehaviour
 
         if (Camera.main)
         {
-            Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray myRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.5f));
             RaycastHit hitInfo;
             GameObject player = GameObject.Find("PlayerShip");
             power = player.GetComponent<Spaceflight>().power;
@@ -36,7 +36,7 @@ public class manager : MonoBehaviour
             transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player.GetComponent<Spaceflight>().life / 1000);//get user life
             transform.Find("ownPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player.GetComponent<Spaceflight>().power;//get user power
 
-            if (Input.GetMouseButtonDown(0))//OnClick
+            if (Input.GetButtonDown("Fire1") || Input.GetMouseButtonDown(0))//OnClick
             {
                 if (Physics.Raycast(myRay, out hitInfo))
                 {
@@ -98,6 +98,7 @@ public class manager : MonoBehaviour
             {
                 Vector3 rect = Camera.main.WorldToScreenPoint(pointers[i].transform.position);
                 GUI.DrawTexture(new Rect(rect.x - 15 / 2, Screen.height - rect.y - 15 / 2, 15, 15), TargetTexture, ScaleMode.StretchToFill, true, 10.0f);
+   
             }
 
         }

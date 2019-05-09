@@ -104,11 +104,19 @@ public class Spaceflight : MonoBehaviour {
             {
                 hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
             }
-            if (Input.GetButtonDown("Jump"))//If the user press space then the speed will be highter
+            if (Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire3"))//If the user press space then the speed will be highter
             {
                 MaxSpeed = 200f;
             }
-            else if (Input.GetButtonUp("Jump"))
+            else if (Input.GetButtonUp("Jump") || Input.GetButtonDown("Fire3"))
+            {
+                MaxSpeed = 100f;
+            }
+            if (Input.GetButtonDown("Fire2"))//If the user press space then the speed will be highter
+            {
+                MaxSpeed = 25f;
+            }
+            else if (Input.GetButtonUp("Fire2"))
             {
                 MaxSpeed = 100f;
             }
