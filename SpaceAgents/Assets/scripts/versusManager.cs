@@ -38,8 +38,8 @@ public class versusManager : MonoBehaviour {
             GameObject player2 = GameObject.Find("PlayerShip2");
             power2 = player2.GetComponent<player2>().power;
             life2 = player2.GetComponent<player2>().life;
-            transform.Find("ownLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player2.GetComponent<player2>().life / 1000);//get user life
-            transform.Find("ownPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player2.GetComponent<player2>().power;//get user power
+            transform.Find("secondLife").GetComponent<UnityEngine.UI.Text>().text = "LIFE: " + (int)(player2.GetComponent<player2>().life / 1000);//get user life
+            transform.Find("secondPower").GetComponent<UnityEngine.UI.Text>().text = "POWER: " + player2.GetComponent<player2>().power;//get user power
 
             if (Input.GetMouseButtonDown(0))//OnClick
             {

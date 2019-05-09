@@ -101,13 +101,13 @@ public class player2 : MonoBehaviour
             {
                 hull.localRotation = Quaternion.Euler(0f, ControlHorizontal * -1f, 0f);
             }
-            if (Input.GetButtonDown("Submit"))//If the user press space then the speed will be highter
+            if (Input.GetButtonDown("Fire1"))//If the user press space then the speed will be highter
             {
-                MaxSpeed = 300f;
+                MaxSpeed = 400f;
             }
-            else if (Input.GetButtonUp("Submit"))
+            else if (Input.GetButtonUp("Fire1"))
             {
-                MaxSpeed = 300f;
+                MaxSpeed = 100f;
             }
         }
     }
