@@ -25,10 +25,15 @@ public class Spaceflight : MonoBehaviour {
     private int index;
     private float toSetIndex = 0.0f;
     public GameObject explosion;
+    public AudioSource colSound;
+    public AudioSource shotSound;
 
     void Start() {
         rb = gameObject.GetComponent<Rigidbody>();
         index = (int)Random.Range(0f, 9f);
+        AudioSource[] audios = GetComponents<AudioSource>();
+        shotSound = audios[1];
+        colSound = audios[2];
     }
 
     void FixedUpdate() {
@@ -134,6 +139,7 @@ public class Spaceflight : MonoBehaviour {
                 {
                     if (hit.collider.tag == "agentship" && isEnemy)//Just if it is an enemy
                     {
+                        shotSound.Play();
                         int Objectlife = manager.life;
                         int Objectpower = manager.power;
                         manager.DownLife(Objectpower);
@@ -175,6 +181,7 @@ public class Spaceflight : MonoBehaviour {
 
     void OnCollisionEnter()
 	{
+        colSound.Play();
 		stunned = 1f;
 	}
 }
