@@ -10,14 +10,14 @@ public class WeaponScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Q)) {
 			foreach (GameObject ss in shotSpawns) {
-				Instantiate (shot,ss.transform.position,ss.transform.rotation);
+                Instantiate (shot,ss.transform.position,ss.transform.rotation);
 			}
 		}
 	}
