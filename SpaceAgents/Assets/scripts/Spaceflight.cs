@@ -36,12 +36,6 @@ public class Spaceflight : MonoBehaviour {
             colSound = audios[2];
         }
         index = (int)Random.Range(0f, 9f);
-        if (isplayer)
-        {
-            AudioSource[] audios = GetComponents<AudioSource>();
-            shotSound = audios[0];
-            colSound = audios[2];
-        }
     }
 
     void FixedUpdate() {
@@ -51,7 +45,7 @@ public class Spaceflight : MonoBehaviour {
         else if (stunned > 0.85f)
             stunned -= Time.fixedDeltaTime * 0.05f;
         else if (stunned > 0f)
-            stunned -= Time.fixedDeltaTim e* 0.5f;
+            stunned -= Time.fixedDeltaTime* 0.5f;
         else
             stunned = 0f;
 
