@@ -32,7 +32,7 @@ public class Spaceflight : MonoBehaviour {
         rb = gameObject.GetComponent<Rigidbody>();
         index = (int)Random.Range(0f, 9f);
         AudioSource[] audios = GetComponents<AudioSource>();
-        shotSound = audios[1];
+        shotSound = audios[0];
         colSound = audios[2];
     }
 
@@ -111,18 +111,22 @@ public class Spaceflight : MonoBehaviour {
             }
             if (Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire3"))//If the user press space then the speed will be highter
             {
+                shotSound.Play();
                 MaxSpeed = 200f;
             }
             else if (Input.GetButtonUp("Jump") || Input.GetButtonDown("Fire3"))
             {
+                shotSound.Play();
                 MaxSpeed = 100f;
             }
             if (Input.GetButtonDown("Fire2"))//If the user press space then the speed will be highter
             {
+                shotSound.Play();
                 MaxSpeed = 25f;
             }
             else if (Input.GetButtonUp("Fire2"))
             {
+                shotSound.Play();
                 MaxSpeed = 100f;
             }
         }
@@ -135,11 +139,12 @@ public class Spaceflight : MonoBehaviour {
                 RaycastHit hit;
                 transform.LookAt(enemies[index].position);
                 rb.AddRelativeForce(0, 0, 0.1f,ForceMode.VelocityChange);
+                
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
                 {
                     if (hit.collider.tag == "agentship" && isEnemy)//Just if it is an enemy
                     {
-                        shotSound.Play();
+                        
                         int Objectlife = manager.life;
                         int Objectpower = manager.power;
                         manager.DownLife(Objectpower);
