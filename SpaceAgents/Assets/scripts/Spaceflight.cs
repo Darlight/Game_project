@@ -31,9 +31,13 @@ public class Spaceflight : MonoBehaviour {
     void Start() {
         rb = gameObject.GetComponent<Rigidbody>();
         index = (int)Random.Range(0f, 9f);
-        AudioSource[] audios = GetComponents<AudioSource>();
-        shotSound = audios[0];
-        colSound = audios[2];
+        if (isplayer)
+        {
+            AudioSource[] audios = GetComponents<AudioSource>();
+            shotSound = audios[0];
+            colSound = audios[2];
+        }
+        
     }
 
     void FixedUpdate() {
