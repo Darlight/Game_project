@@ -113,23 +113,23 @@ public class Spaceflight : MonoBehaviour {
             }
             if (Input.GetButtonDown("Jump") || Input.GetButtonDown("Fire3"))//If the user press space then the speed will be highter
             {
-                shotSound.Play();
                 MaxSpeed = 200f;
             }
             else if (Input.GetButtonUp("Jump") || Input.GetButtonDown("Fire3"))
             {
-                shotSound.Play();
                 MaxSpeed = 100f;
             }
             if (Input.GetButtonDown("Fire2"))//If the user press space then the speed will be highter
             {
-                shotSound.Play();
                 MaxSpeed = 25f;
             }
             else if (Input.GetButtonUp("Fire2"))
             {
-                shotSound.Play();
                 MaxSpeed = 100f;
+            }
+            if (Input.GetButtonUp("Fire1"))
+            {
+                shotSound.Play();
             }
         }
         //if it is a bot, or it is not a player

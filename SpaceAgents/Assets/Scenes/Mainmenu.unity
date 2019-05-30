@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1651323609}
-  selectedObject: {fileID: 0}
+  selectedObject: {fileID: 1415096056}
 --- !u!1 &192581236
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,6 +1834,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1173962707}
   m_CullTransparentMesh: 0
+--- !u!1 &1415096056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100008, guid: b6a1cf4e3eeaf9a4ca38bf8acb910a6d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1962987417}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1415096057 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 22400008, guid: b6a1cf4e3eeaf9a4ca38bf8acb910a6d,
